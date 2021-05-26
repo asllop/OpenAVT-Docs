@@ -249,7 +249,7 @@ Time elapsed since the stream starts loading until it starts playing.
 
 Is the `timeSinceStreamLoad` (or `timeSinceMediaRequest`) value of the `START` event. This one is probably the most used KPI in audio & video telemetry.
 
-### 5.2 Number of Playback
+### 5.2 Number of Playbacks
 
 Number of playback started during a certain period of time.
 
@@ -269,7 +269,7 @@ Is the difference between the number of `STREAM_LOAD` and the number of `START` 
 
 ### 5.5 Buffering Time
 
-Total time spend in buffering blocks.
+Total time spent in buffering blocks.
 
 Is the `ACCUM_BUFFER_TIME` attribute. If we want to know this value at the end of the video playback, we have to get this attribute from the `END` or `STOP` event, or the latest event of a video session.
 
@@ -283,7 +283,7 @@ Number of `BUFFER_BEGIN` events where `IN_PLAYBACK_BLOCK` is true, and `IN_PAUSE
 
 The number of quality changes during the playback.
 
-It's a simple count of the number of `QUALITY_CHANGE_UP` and `QUALITY_CHANGE_DOWN` events. Normally the quality changes happen at the begining of a playback, when the player is adjusting the quality to the current connection conditions. But this changes use to happen in 1 to 3 steps. If there are a lot of quality changes during a playback and specially if they happen long after the begining, it usually denotes a unstable connection.
+It's a simple count of the number of `QUALITY_CHANGE_UP` and `QUALITY_CHANGE_DOWN` events. Normally the quality changes happen at the begining of a playback, when the player is adjusting the quality to the current connection conditions. But these changes use to happen in 1 to 3 steps. If there are a lot of quality changes during a playback and specially if they happen long after the begining, it usually denotes a unstable connection.
 
 ### 5.8 Ended Playbacks without errors
 
