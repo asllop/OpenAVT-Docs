@@ -241,7 +241,7 @@ For OpenAVT these types are purely semantical, they have no implications in how 
 <a name="kpi"></a>
 ## 5. KPIs
 
-In this section, we are going to expose general terms of how to calculate the most common audio-video KPIs using the OpenAVT data model. But not the exact practice of KPI calculation, because this is something that depends on the platform where our data is recorded. A query made for InfluxDB is totally different from a query for New Relic.
+In this section, we are going to expose general terms of how to calculate the most common audio-video KPIs using the OpenAVT data model. But not the exact practice of KPI calculation, because this is something that depends on the platform where our data is recorded. A query made for InfluxDB is different from a query for New Relic.
 
 ### 5.1 Start Time
 
