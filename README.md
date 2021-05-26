@@ -1,10 +1,18 @@
 # OpenAVT-Docs
 Documentation repository for the OpenAVT project.
 
+1. [ Introduction ](#intro)
+2. [ Platforms ](#platform)
+3. [ Structure and Behavior ](#struct)
+4. [ Data Model ](#model)
+5. [ KPIs ](#kpi)
+
+<a name="intro"></a>
 ## 1. Introduction
 
 The Open Audio-Video Telemetry is a multiplatform set of tools for performance monitoring in multimedia applications. The objectives are similar to those of the OpenTelemetry project, but specifically for sensing data from audio and video players.
 
+<a name="platform"></a>
 ## 2. Platforms
 
 Currently OpenAVT supports the following platforms:
@@ -14,11 +22,58 @@ Currently OpenAVT supports the following platforms:
 
 Visit the repos and checkout the README for specific installation and usage instructions.
 
-## 3. Data Model
+<a name="struct"></a>
+## 3. Structure and Behavior
+
+
+### 3.1 The Instrument
+
+In OpenAVT the central concept is the **Instrument**. An instrument contains a chain of objects that captures, processes and transmits data from a multimedia player. Each of these three steps is represented by:
+
+- **Trackers**: used to capture data from a specific player. A tracker also keeps its state (but shouldn't modify it, this is a job for the Hub).
+
+- **Hub**: contains the business logic. Is used to process the data captured by a tracker, update states and tranform events if necessary.
+
+- **Metricalc**: used to calculate metrics. This step is optional.
+
+- **Backend**: used to transmit data to a data service, database, business intelligence system, storage media or similar.
+
+These objects represents a chain because the data goes from one step to the next in a straight line. The data captured by a tracker is sent to the hub, then it goes to the metric calculator and finally to the backend.
+
+One instrument can contain multiple trackers, but only one hub, one metricalc and one backend.
+
+![Alt text](./oavtinstrument_diag.svg)
+
+### 3.2 The Data
+
+We talked about data being captured and passed along the instrument chain, but what is the nature of this data?
+
+In OpenAVT the main data unit is the **Event**. An event contains an **Action** and a list of **Attributes**.
+
+The action tells us what is the event about, for example when a video starts, an event with the action `OAVTAction.START` is sent.
+
+The attributes offers context for the actions. For example, the attribute `OAVTAttribute.DURATION` informs the stream duration in milliseconds.
+
+OpenAVT can also generate **Metrics**, using an specific step called metricalc (Metric Calculator). A metric is defined by three propeties: name (`String`), value (`Float` or `Integer`) and type (`Counter` or `Gauge`). An example of metric is `OAVTMetric.START_TIME`, that informs the time elapsed between a video is requested and it actually starts playing.
+
+Both, events and metrics, are time series data, and thus both contain a `timestamp` property, defining the moment when it was created.
+
+### 3.3 The Chain
+
+The instrument chain describes the steps followed by an event from the moment it is created untill the end of its life.
+
+1. The journey of an event starts with a call to `OAVTInstrument.emit(...)`, that can be called from anywhere, but it's usually called from within a tracker. This function takes an action and a tracker, and generates en event. Initially the event only contains few attributes: the sender ID (that identifies a tracker within an instrument), the timer attributes of previous events and the custom attributes of the instrument created with `OAVTInstrument.addAttribute(...)`.
+2. Once the event is created it is sent to the tracker, calling the method `OAVTTracker.initEvent(...)`. This method receives an event and returns it, in between it can be tranformed by adding/changing attributes (calling `OAVTEvent.setAttribute(...)`), or even it can stop the chain by returning a nil.
+3. The event passed by the tracker is sent to the hub, calling `OAVTHub.processEvent(...)`. This method works like the previous, it takes an event and returns it and in between it can be tranformed, blocked, etc.
+4. If a metricalc is defined, the event is passed to it by calling `OAVTMetricalc.processMetric(...)`. This method returns an array of metrics (instances of `OAVTMetric`). The array can be empty if no metrics are generated.
+5. Finally the event and the metrics are passed to the backend by calling `OAVTBackend.sendEvent(...)` and `OAVTBackend.sendMetric(...)`. These methods return nothing, and the chain ends here.
+
+<a name="model"></a>
+## 4. Data Model
 
 The Data Model describes all the data an instrument could generate and the meaning of each piece of information.
 
-#### 3.1 The telemetry dilemma: Events or Metrics?
+### 4.1 The telemetry dilemma: Events or Metrics?
 
 First let's define what are Events and Metrics in the context of OpenAVT. Both are time series data, but there are some differences:
 
@@ -34,7 +89,7 @@ Metrics are small and doesn't get too much space on a database. Queries over met
 
 Also, some backends can work better with (or only support) one kind of data. For example, Graphite only offers support for metrics (that's actually not true, it supports events, but they are so limited that doesn't fit the needs of OpenAVT Events).
 
-#### 3.2 Events
+### 4.2 Events
 
 Events indicate that something happened in the tracker lifecycle and player workflow. Each event has a type, that in OpenAVT is called Action. The following is an exhaustive list of the available actions. Not all actions are used in all contexts and some players doesn't support certain actions.
 
@@ -105,7 +160,7 @@ An `AD_SKIP` when the user skips the ad can happen at any time.
 An `AD_CLICK` when the user taps the ad can happen at any time.
 An `AD_ERROR` can happen at any time and is usually followed by `AD_FINISH` and also commonly by an `AD_BREAK_FINISH`.
 
-#### 3.3 Attributes
+### 4.3 Attributes
 
 As we already said, en event is composed out of an action and a list of attributes. Here we present the list of attributes generated by OpenAVT. Again, like in events, not all attributes are always present in all trackers. Some information may not be available in certain players.
 
@@ -162,7 +217,7 @@ Note: Times are in milliseconds.
 
 The is also a family of attributes called time-since attributes. They indicate the time elapsed since a certain event was sent. For example `timeSinceTrackerInit` is the time since `TRACKER_INIT` was sent. Every event has a time-since attribute associated.
 
-#### 3.4 Metrics
+### 4.4 Metrics
 
 Metrics represent a numerical value that varies over time. OpenAVT supports two types of metrics: Gauge and Counter.
 
@@ -183,60 +238,60 @@ For OpenAVT these types are purely semantical, they have no implications in how 
 | `NUM_ENDS` | Counter | Number of stream ends. |
 
 
-<a name="model"></a>
-## 4. KPIs
+<a name="kpi"></a>
+## 5. KPIs
 
 In this section we are going to expose general terms of how to calculate the most common audio-video KPIs using the OpenAVT data model. But not the exact practice of KPI calculation, because this is something that depends on the platform where our data is recorded. Is totally different a query made for InfluxDB than a query for New Relic.
 
-### 4.1 Start Time
+### 5.1 Start Time
 
 Time elapsed since the stream starts loading until it starts playing.
 
 Is the `timeSinceStreamLoad` (or `timeSinceMediaRequest`) value of the `START` event. This one is probably the most used KPI in audio & video telemetry.
 
-### 4.2 Number of Playback
+### 5.2 Number of Playback
 
 Number of playback started during a certain period of time.
 
 The simple count of `START` events.
 
-### 4.3 Concurrent Playbacks
+### 5.3 Concurrent Playbacks
 
 Number of concurrent playbacks at a certain moment.
 
 The count of `PING` events. To be accurated the time range selected must be of 30 seconds, because is the ping period. We could improve the granularity by sending pings more often, at the cost of increasing the traffic and database size.
 
-### 4.4 Aborted Before Video Start
+### 5.4 Aborted Before Video Start
 
 The proportion (or number) of streams that started loading but never started playing.
 
 Is the difference between the number of `STREAM_LOAD` and the number of `START` events.
 
-### 4.5 Rebuffering Time
+### 5.5 Rebuffering Time
 
 Total time spend in buffering blocks that are not the initial stream loading.
 
 Is the `ACCUM_BUFFER_TIME` attribute minus the start time.
 
-### 4.6 Number of Rebufferings
+### 5.6 Number of Rebufferings
 
 The number of rebuffering blocks.
 
 Number of `BUFFER_BEGIN` events minus one (the initial).
 
-### 4.7 Number of Quality Changes
+### 5.7 Number of Quality Changes
 
 The number of quality changes during the playback.
 
 It's a simple count of the number of `QUALITY_CHANGE_UP` and `QUALITY_CHANGE_DOWN` events. Normally the quality changes happen at the begining of a playback, when the player is adjusting the quality to the current connection conditions. But this changes use to happen in 1 to 3 steps. If there are a lot of quality changes during a playback and specially if they happen long after the begining, it usually denotes a unstable connection.
 
-### 4.8 Ended Playbacks without errors
+### 5.8 Ended Playbacks without errors
 
 The number or proportion of playbacks that ended normally, without errors.
 
 We use the value of `COUNT_ERROR` when `END` or `STOP` happens. For sessions without error this value must be 0.
 
-### 4.9 Initial vs Mid-stream errors
+### 5.9 Initial vs Mid-stream errors
 
 The proportion of initial errors (errors that happen before the `START` or short after it) and mid-stream errors.
 
