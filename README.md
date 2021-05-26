@@ -267,11 +267,11 @@ The proportion (or number) of streams that started loading but never started pla
 
 Is the difference between the number of `STREAM_LOAD` and the number of `START` events.
 
-### 5.5 Rebuffering Time
+### 5.5 Buffering Time
 
-Total time spend in buffering blocks that are not the initial stream loading.
+Total time spend in buffering blocks.
 
-Is the `ACCUM_BUFFER_TIME` attribute minus the start time.
+Is the `ACCUM_BUFFER_TIME` attribute. If we want to know this value at the end of the video playback, we have to get this attribute from the `END` or `STOP` event, or the latest event of a video session.
 
 ### 5.6 Number of Rebufferings
 
