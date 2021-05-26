@@ -251,7 +251,7 @@ Is the `timeSinceStreamLoad` (or `timeSinceMediaRequest`) value of the `START` e
 
 ### 5.2 Number of Playbacks
 
-Number of playbacks started during a certain period.
+The number of playbacks started during a certain period.
 
 The simple count of `START` events.
 
