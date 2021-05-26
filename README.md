@@ -275,9 +275,9 @@ Is the `ACCUM_BUFFER_TIME` attribute minus the start time.
 
 ### 5.6 Number of Rebufferings
 
-The number of rebuffering blocks.
+The number of rebuffering blocks, bufferings that are presumably caused by a connection issue, because are not induced by the initial load, pause or seeking.
 
-Number of `BUFFER_BEGIN` events minus one (the initial).
+Number of `BUFFER_BEGIN` events where `IN_PLAYBACK_BLOCK` is true, and `IN_PAUSE_BLOCK` and `IN_SEEK_BLOCK` are false.
 
 ### 5.7 Number of Quality Changes
 
