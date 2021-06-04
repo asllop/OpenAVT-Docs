@@ -17,8 +17,8 @@ The Open Audio-Video Telemetry is a multiplatform set of tools for performance m
 
 Currently, OpenAVT supports the following platforms:
 
-- [Android](https://github.com/asllop/OpenAVT-Android)
 - [iOS / tvOS](https://github.com/asllop/OpenAVT-iOS)
+- [Android](https://github.com/asllop/OpenAVT-Android)
 
 Visit the repositories and check out the README for specific installation and usage instructions.
 
