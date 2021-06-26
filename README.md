@@ -189,7 +189,7 @@ Note: Times are in milliseconds.
 | `resolutionHeight` | Integer | Stream vertical resolution. |
 | `resolutionWidth` | Integer | Stream horizontal resolution. |
 | `isMuted` | Boolean | Playback muted. |
-| `volum` | Integer | Volume, from 0 to 100. |
+| `volume` | Integer | Volume, from 0 to 100. |
 | `fps` | Float | Frames per second. |
 | `source` | String | Stream source, usually a URL. |
 | `bitrate` | Integer | Stream bitrate in bits per second. |
