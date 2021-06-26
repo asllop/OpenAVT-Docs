@@ -241,7 +241,7 @@ For OpenAVT these types are purely semantical, they have no implications in how 
 <a name="kpi"></a>
 ## 5. KPIs
 
-In this section, we are going to expose general terms of how to calculate the most common audio-video KPIs using the OpenAVT data model. But not the exact practice of KPI calculation, because this is something that depends on the platform where our data is recorded. A query made for InfluxDB is different from a query for New Relic.
+In this section, we are going to expose general terms of how to calculate the most common audio-video KPIs using the OpenAVT data model. But not the exact practice of KPI calculation, because this is something that depends on the platform where our data is recorded and explaining it goes beyond the purpose of the present document.
 
 ### 5.1 Start Time
 
@@ -259,7 +259,7 @@ The simple count of `Start` events.
 
 The number of concurrent playbacks at a certain moment.
 
-The count of `Ping` events. To be accurate the time range selected must be of 30 seconds because is the ping period. We could improve the granularity by sending pings more often, at the cost of increasing the traffic and database size.
+The count of `Ping` events. To be accurate the time range selected must be of 30 seconds because is the default ping period. We could improve the granularity by sending pings more often, at the cost of increasing the traffic and database size.
 
 ### 5.4 Aborted Before Video Start
 
