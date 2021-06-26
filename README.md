@@ -279,19 +279,25 @@ The number of rebuffering blocks, which are the buffering blocks that are presum
 
 The number of `BufferBegin` events where `inPlaybackBlock` is true, and `inPauseBlock` and `inSeekBlock` are false.
 
-### 5.7 Number of Quality Changes
+### 5.7 Rebuffering Time
+
+Total time in rebuffering blocks.
+
+The sum of `timeSinceBufferBegin` of `BufferFinish` events where `inPlaybackBlock` is true, and `inPauseBlock` and `inSeekBlock` are false.
+
+### 5.8 Number of Quality Changes
 
 The number of quality changes during the playback.
 
-It's a simple count of the number of `QualityChangeUp` and `QualityChangeDown` events. Normally the quality changes happen at the beginning of playback when the player is adjusting the quality to the current connection conditions. But these changes use to happen in 1 to 3 steps. If there are a lot of quality changes during playback and especially if they happen long after the beginning, it usually denotes an unstable connection.
+Is the count of `QualityChangeUp` and `QualityChangeDown` events. Normally the quality changes happen at the beginning of playback when the player is adjusting the quality to the current connection conditions. But these changes use to happen in 1 to 3 steps. If there are a lot of quality changes during playback and especially if they happen long after the beginning, it usually denotes an unstable connection.
 
-### 5.8 Ended Playbacks without errors
+### 5.9 Ended Playbacks without errors
 
 The number or proportion of playbacks that ended normally, without errors.
 
 We use the value of `countErrors` when `End` or `Stop` happens. For sessions without error, this value must be 0.
 
-### 5.9 Initial vs Mid-stream errors
+### 5.10 Initial vs Mid-stream errors
 
 The proportion of initial errors (errors that happen before the `Start` or shortly after it) and mid-stream errors.
 
