@@ -17,8 +17,9 @@ The Open Audio-Video Telemetry is an open, multiplatform, and vendor-agnostic se
 
 Currently, OpenAVT supports the following platforms:
 
-- [iOS / tvOS](https://github.com/asllop/OpenAVT-iOS)
+- [iPhone / iPad / AppleTV](https://github.com/asllop/OpenAVT-iOS)
 - [Android](https://github.com/asllop/OpenAVT-Android)
+- [Web / Chromecast / SmartTVs](https://github.com/asllop/OpenAVT-JS)
 
 Visit the repositories and check out the README for specific installation and usage instructions.
 
