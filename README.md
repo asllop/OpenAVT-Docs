@@ -240,7 +240,7 @@ For OpenAVT these types are purely semantical, they have no implications in how 
 
 ### 4.5 Custom Models
 
-OpenAVT provides OOTB the Actions, Attributes and Metrics just described, but users can create their own ones to fit specific needs not explicitely covered here. Please refere to the section `Custom Elements` on each [platform repo](#platform) to learn how to create custom models.
+OpenAVT provides OOTB the Actions, Attributes and Metrics just described, but users can create their own ones to fit specific needs not explicitely covered here. Please refere to the section **Custom Elements** on each [platform repo](#platform) to learn how to create custom models.
 
 <a name="kpi"></a>
 ## 5. KPIs
