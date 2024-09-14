@@ -10,7 +10,7 @@ Documentation repository for the OpenAVT project.
 <a name="intro"></a>
 ## 1. Introduction
 
-The Open Audio-Video Telemetry is an open, multiplatform, and vendor-agnostic set of tools for performance monitoring in multimedia applications. The objectives are similar to those of the OpenTelemetry project, but specifically for sensing data from audio and video players.
+The Open Audio-Video Telemetry is an open, multiplatform, and vendor-agnostic set of tools for performance monitoring in multimedia applications. The main goal of OpenAVT is to provide an open alternative to services like Conviva, NPAW and Mux.
 
 <a name="platform"></a>
 ## 2. Platforms
